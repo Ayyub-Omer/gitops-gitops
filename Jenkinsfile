@@ -2,6 +2,9 @@ pipeline {
   triggers {
     pollSCM ('* * * * *')
   }
+  options {
+    disableConcurrentBuilds()
+  }
   agent {
     node {
       label 'nodejs'
