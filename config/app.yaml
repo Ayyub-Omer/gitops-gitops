@@ -83,7 +83,7 @@ items:
       app.kubernetes.io/instance: temps
     name: temps
   spec:
-    replicas: 1
+    replicas: 3
     selector:
       matchLabels:
         deployment: temps
