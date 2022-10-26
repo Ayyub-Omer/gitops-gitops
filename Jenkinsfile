@@ -13,7 +13,7 @@ pipeline {
   stages {
     stage ('Validate configuration resources') {
       steps {
-        sh 'oc apply --dry-run --validate -k config'
+        sh 'oc apply --dry-run --validate -f config'
       }
     }
     stage ('Apply resources') {
@@ -21,8 +21,7 @@ pipeline {
         branch 'main'
       }
       steps {
-        sh 'oc apply -k config'
-        sh './wait_oauth.sh'
+        sh 'oc apply -f config'
       }
     }
   }
