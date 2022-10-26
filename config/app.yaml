@@ -135,7 +135,7 @@ items:
     name: temps
     namespace: tempapp
   spec:
-    host: tempapp.apps.ocp4.example.com
+    host: temps-tempapp.apps.ocp4.example.com
     port:
       targetPort: 8080-tcp
     to:
