@@ -23,8 +23,6 @@ items:
   spec:
     lookupPolicy:
       local: false
-  status:
-    dockerImageRepository: ""
 - apiVersion: build.openshift.io/v1
   kind: BuildConfig
   metadata:
@@ -67,8 +65,6 @@ items:
     - type: ConfigChange
     - imageChange: {}
       type: ImageChange
-  status:
-    lastVersion: 0
 - apiVersion: apps/v1
   kind: Deployment
   metadata:
@@ -105,7 +101,6 @@ items:
           - containerPort: 8443
             protocol: TCP
           resources: {}
-  status: {}
 - apiVersion: v1
   kind: Service
   metadata:
@@ -130,45 +125,15 @@ items:
       targetPort: 8443
     selector:
       deployment: temps
-  status:
-    loadBalancer: {}
 - apiVersion: route.openshift.io/v1
   kind: Route
   metadata:
-    annotations:
-      openshift.io/host.generated: "true"
-    creationTimestamp: "2022-10-26T07:26:55Z"
     labels:
       app: temps
       app.kubernetes.io/component: temps
       app.kubernetes.io/instance: temps
-    managedFields:
-    - apiVersion: route.openshift.io/v1
-      fieldsType: FieldsV1
-      fieldsV1:
-        f:metadata:
-          f:labels:
-            .: {}
-            f:app: {}
-            f:app.kubernetes.io/component: {}
-            f:app.kubernetes.io/instance: {}
-        f:spec:
-          f:port:
-            .: {}
-            f:targetPort: {}
-          f:to:
-            f:kind: {}
-            f:name: {}
-            f:weight: {}
-          f:wildcardPolicy: {}
-      manager: kubectl-expose
-      operation: Update
-      time: "2022-10-26T07:26:55Z"
     name: temps
     namespace: tempapp
-    resourceVersion: "99884"
-    selfLink: /apis/route.openshift.io/v1/namespaces/tempapp/routes/temps
-    uid: 74be2503-a8d5-4968-9312-3cdf05b24197
   spec:
     host: tempapp.apps.ocp4.example.com
     port:
@@ -178,4 +143,3 @@ items:
       name: temps
       weight: 100
     wildcardPolicy: None
-  status: {}
