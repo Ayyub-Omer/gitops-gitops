@@ -5,114 +5,93 @@ items:
 - apiVersion: project.openshift.io/v1
   kind: Project
   metadata:
-    name: tempapp
+    name: todoapp
   spec: {}
   status: {}
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    labels:
+      app: todo
+      app.kubernetes.io/component: todo
+      app.kubernetes.io/instance: todo
+    name: todo
+    namespace: todoapp
+  spec:
+    host: todo-todoapp.apps.ocp4.example.com
+    port:
+      targetPort: 8080-tcp
+    to:
+      kind: Service
+      name: todo
+      weight: 100
+    wildcardPolicy: None
 - apiVersion: image.openshift.io/v1
   kind: ImageStream
   metadata:
-    namespace: tempapp
-    annotations:
-      openshift.io/generated-by: OpenShiftNewApp
-    creationTimestamp: null
+    namespace: todoapp
     labels:
-      app: temps
-      app.kubernetes.io/component: temps
-      app.kubernetes.io/instance: temps
-    name: temps
+      app: todo
+      app.kubernetes.io/component: todo
+      app.kubernetes.io/instance: todo
+    name: todo
   spec:
     lookupPolicy:
       local: false
-- apiVersion: build.openshift.io/v1
-  kind: BuildConfig
-  metadata:
-    namespace: tempapp
-    annotations:
-      openshift.io/generated-by: OpenShiftNewApp
-    creationTimestamp: null
-    labels:
-      app: temps
-      app.kubernetes.io/component: temps
-      app.kubernetes.io/instance: temps
-    name: temps
-  spec:
-    nodeSelector: null
-    output:
-      to:
-        kind: ImageStreamTag
-        name: temps:latest
-    postCommit: {}
-    resources: {}
-    source:
-      contextDir: temps
-      git:
-        uri: https://github.com/RedHatTraining/DO180-apps
-      type: Git
-    strategy:
-      sourceStrategy:
-        from:
-          kind: ImageStreamTag
-          name: php:7.3
-          namespace: openshift
-      type: Source
-    triggers:
-    - github:
-        secret: tJI5or7sxA2uQ1rcgFeZ
-      type: GitHub
-    - generic:
-        secret: ZWFesDQMMQHoLTBnVqly
-      type: Generic
-    - type: ConfigChange
-    - imageChange: {}
-      type: ImageChange
+    tags:
+    - annotations:
+        openshift.io/imported-from: quay.io/redhattraining/todo-angular:v1.1
+      from:
+        kind: DockerImage
+        name: quay.io/redhattraining/todo-angular:v1.1
+      generation: null
+      importPolicy: {}
+      name: v1.1
+      referencePolicy:
+        type: ""
+  status:
+    dockerImageRepository: ""
 - apiVersion: apps/v1
   kind: Deployment
   metadata:
-    namespace: tempapp
+    namespace: todoapp
     annotations:
-      image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"temps:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"temps\")].image"}]'
-      openshift.io/generated-by: OpenShiftNewApp
-    creationTimestamp: null
+      image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"todo:v1.1"},"fieldPath":"spec.template.spec.containers[?(@.name==\"todo\")].image"}]'
     labels:
-      app: temps
-      app.kubernetes.io/component: temps
-      app.kubernetes.io/instance: temps
-    name: temps
+      app: todo
+      app.kubernetes.io/component: todo
+      app.kubernetes.io/instance: todo
+    name: todo
   spec:
     replicas: 1
     selector:
       matchLabels:
-        deployment: temps
+        deployment: todo
     strategy: {}
     template:
       metadata:
-        annotations:
-          openshift.io/generated-by: OpenShiftNewApp
-        creationTimestamp: null
         labels:
-          deployment: temps
+          deployment: todo
       spec:
         containers:
         - image: ' '
-          name: temps
+          name: todo
           ports:
           - containerPort: 8080
             protocol: TCP
           - containerPort: 8443
             protocol: TCP
           resources: {}
+  status: {}
 - apiVersion: v1
   kind: Service
   metadata:
-    namespace: tempapp
-    annotations:
-      openshift.io/generated-by: OpenShiftNewApp
-    creationTimestamp: null
+    namespace: todoapp
     labels:
-      app: temps
-      app.kubernetes.io/component: temps
-      app.kubernetes.io/instance: temps
-    name: temps
+      app: todo
+      app.kubernetes.io/component: todo
+      app.kubernetes.io/instance: todo
+    name: todo
   spec:
     ports:
     - name: 8080-tcp
@@ -124,22 +103,4 @@ items:
       protocol: TCP
       targetPort: 8443
     selector:
-      deployment: temps
-- apiVersion: route.openshift.io/v1
-  kind: Route
-  metadata:
-    labels:
-      app: temps
-      app.kubernetes.io/component: temps
-      app.kubernetes.io/instance: temps
-    name: temps
-    namespace: tempapp
-  spec:
-    host: temps-tempapp.apps.ocp4.example.com
-    port:
-      targetPort: 8080-tcp
-    to:
-      kind: Service
-      name: temps
-      weight: 100
-    wildcardPolicy: None
+      deployment: todo
