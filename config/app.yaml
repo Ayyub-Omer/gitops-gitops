@@ -18,7 +18,7 @@ items:
     name: todo
     namespace: todoapp
   spec:
-    host: totodo-todoapp.apps.ocp4.example.com
+    host: todo-todoapp.apps.ocp4.example.com
     port:
       targetPort: 8080-tcp
     to:
